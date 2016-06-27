@@ -217,6 +217,9 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="rootuploaded\file1.txt" />
+    <Content Include="rootuploaded\file2.txt" />
+    <Content Include="rootuploaded\file3.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
