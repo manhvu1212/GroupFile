@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<string>
+
+<h3>List File</h3>
+<ul>
+    @foreach (var file in Model)
+    {
+        <li>@file</li>
+    }
+</ul>
+
+
+<h3>Group File</h3>
+
+
