@@ -2,35 +2,37 @@
 using System.IO;
 using System.Web.Mvc;
 using System.Collections.Generic;
+using GroupFile.Models;
+using System.Linq;
 
 namespace GroupFile.Controllers
 {
     public class FilesController : Controller
     {
-        const string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
-        const char[] delimiterChars = { '_', '-', ' ' };
+        public static readonly string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
+        public static readonly char[] DELIMITER_CHARS = { '_', '-', ' ' };
 
         // GET: Files
         public ActionResult Index()
         {
-            List<string> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
+            List<SplitFileModel> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
             return View(listFile);
         }
 
-        public List<string> ProcessDirectory(string pathfile)
+        public List<SplitFileModel> ProcessDirectory(string pathfile)
         {
-            List<string> listFile = new List<string>();
+            List<SplitFileModel> listFile = new List<SplitFileModel>();
 
             foreach (string directory in Directory.GetDirectories(pathfile))
             {
                 listFile.AddRange(ProcessDirectory(directory));
             }
-            
+
             try
             {
                 foreach (string file in Directory.GetFiles(pathfile))
                 {
-                    listFile.Add(Path.GetFullPath(file));
+                    listFile.Add(SplitFileName(Path.GetFileNameWithoutExtension(file)));
                 }
             }
             catch (DirectoryNotFoundException e)
@@ -41,15 +43,45 @@ namespace GroupFile.Controllers
             return listFile;
         }
 
-        public void SplitFileName (string filename)
+        public SplitFileModel SplitFileName(string filename)
         {
-            string[] words = filename.Split(delimiterChars);
+            SplitFileModel splitFile = new SplitFileModel();
 
+            if (ContainsDelimiter(filename))
+            {
+                foreach (char delimiter in DELIMITER_CHARS)
+                {
+                    string[] words = filename.Split(delimiter);
+                    if (words.Length > 1)
+                    {
+                        if (ContainsDelimiter(words[words.Length - 1]))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            splitFile.link = delimiter.ToString();
+                            splitFile.suffix = words[words.Length - 1];
+                            splitFile.prefix = String.Join(delimiter.ToString(), words.Take(words.Length - 1));
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+            else
+            {
+                splitFile.prefix = filename;
+            }
+
+            return splitFile;
         }
 
         public bool ContainsDelimiter(string text)
         {
-            return text.IndexOfAny(delimiterChars) != -1;
+            return text.IndexOfAny(DELIMITER_CHARS) != -1;
         }
     }
 }

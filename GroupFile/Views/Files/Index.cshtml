@@ -4,13 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model List<string>
+@model List<GroupFile.Models.SplitFileModel>
 
 <h3>List File</h3>
 <ul>
     @foreach (var file in Model)
     {
-        <li>@file</li>
+        <li>@file.prefix</li>
     }
 </ul>
 
