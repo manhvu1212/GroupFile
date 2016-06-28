@@ -7,7 +7,8 @@ namespace GroupFile.Controllers
 {
     public class FilesController : Controller
     {
-        public static readonly string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
+        const string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
+        const char[] delimiterChars = { '_', '-', ' ' };
 
         // GET: Files
         public ActionResult Index()
@@ -38,6 +39,17 @@ namespace GroupFile.Controllers
             }
 
             return listFile;
+        }
+
+        public void SplitFileName (string filename)
+        {
+            string[] words = filename.Split(delimiterChars);
+
+        }
+
+        public bool ContainsDelimiter(string text)
+        {
+            return text.IndexOfAny(delimiterChars) != -1;
         }
     }
 }
