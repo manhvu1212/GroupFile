@@ -14,3 +14,5 @@ Given a directory tree, with root folder name is “rootuploaded”, we need to 
 <li>FileName1.ext, FileName2.ext, ..., FileNameN.ext (maybe not continuous)</li>
 </ul></li>
 </ul>
+
+## Official Documentation
