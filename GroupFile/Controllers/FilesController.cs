@@ -50,39 +50,46 @@ namespace GroupFile.Controllers
         {
             SplitFileModel splitFile = new SplitFileModel();
 
-            if (ContainsDelimiter(filename))
+            int index = NumberInLastString(filename);
+            if (index == -1)
             {
-                foreach (char delimiter in DELIMITER_CHARS)
-                {
-                    string[] words = filename.Split(delimiter);
-                    if (words.Length > 1)
-                    {
-                        if (ContainsDelimiter(words[words.Length - 1]))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            splitFile.link = delimiter.ToString();
-                            splitFile.suffix = words[words.Length - 1];
-                            splitFile.prefix = String.Join(delimiter.ToString(), words.Take(words.Length - 1));
-                        }
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
+                splitFile.suffix = "nothing";
+                splitFile.prefix = "nothing";
             }
             else
             {
-                var numAlpha = new Regex("(?<Alpha>[*]*)(?<Numeric>[0-9]*)");
-                var match = numAlpha.Match(filename);
-
-                splitFile.prefix = match.Groups["Alpha"].Value;
-                splitFile.suffix = match.Groups["Numeric"].Value;
-                splitFile.link = null;
+                splitFile.suffix = filename.Substring(index);
+                splitFile.prefix = filename.Substring(0, index);
             }
+
+            //if (ContainsDelimiter(filename))
+            //{
+            //    foreach (char delimiter in DELIMITER_CHARS)
+            //    {
+            //        string[] words = filename.Split(delimiter);
+            //        if (words.Length > 1)
+            //        {
+            //            if (ContainsDelimiter(words[words.Length - 1]))
+            //            {
+            //                continue;
+            //            }
+            //            else
+            //            {
+            //                splitFile.link = delimiter.ToString();
+            //                splitFile.suffix = words[words.Length - 1];
+            //                splitFile.prefix = String.Join(delimiter.ToString(), words.Take(words.Length - 1));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            continue;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+
+            //}
 
             return splitFile;
         }
@@ -95,7 +102,7 @@ namespace GroupFile.Controllers
         public int NumberInLastString(string text)
         {
             int index = -1;
-            for (int i = text.Length - 1; i < 0; i--)
+            for (int i = text.Length - 1; i >= 0; i--)
             {
                 if (Char.IsDigit(text[i]))
                 {
