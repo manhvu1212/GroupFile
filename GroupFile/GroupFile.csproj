@@ -263,6 +263,7 @@
     <Content Include="rootuploaded\file-1.docx" />
     <Content Include="rootuploaded\file-name-1.xlsx" />
     <Content Include="rootuploaded\myfile.docx" />
+    <Content Include="rootuploaded\my_file-1_a.xlsx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
