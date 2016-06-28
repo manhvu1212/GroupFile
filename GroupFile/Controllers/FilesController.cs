@@ -15,24 +15,27 @@ namespace GroupFile.Controllers
         // GET: Files
         public ActionResult Index()
         {
-            List<SplitFileModel> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
+            List<FileModel> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
             return View(listFile);
         }
 
-        public List<SplitFileModel> ProcessDirectory(string pathfile)
+        public List<FileModel> ProcessDirectory(string pathfile)
         {
-            List<SplitFileModel> listFile = new List<SplitFileModel>();
+            List<FileModel> listFiles = new List<FileModel>();
 
             foreach (string directory in Directory.GetDirectories(pathfile))
             {
-                listFile.AddRange(ProcessDirectory(directory));
+                listFiles.AddRange(ProcessDirectory(directory));
             }
 
             try
             {
                 foreach (string file in Directory.GetFiles(pathfile))
                 {
-                    listFile.Add(SplitFileName(Path.GetFileNameWithoutExtension(file)));
+                    FileModel listFile = new FileModel();
+                    listFile.FullPath = Path.GetFullPath(file);
+                    listFile.SpliFileName = SplitFileName(Path.GetFileNameWithoutExtension(file));
+                    listFiles.Add(listFile);
                 }
             }
             catch (DirectoryNotFoundException e)
@@ -40,7 +43,7 @@ namespace GroupFile.Controllers
 
             }
 
-            return listFile;
+            return listFiles;
         }
 
         public SplitFileModel SplitFileName(string filename)

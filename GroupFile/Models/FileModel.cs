@@ -8,7 +8,6 @@ namespace GroupFile.Models
     public class FileModel
     {
         public string FullPath { get; set; }
-        public string FileNameWithoutExtension { get; set; }
         public SplitFileModel SpliFileName { get; set; }
         public int Group { get; set; }
     }
