@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,7 +9,14 @@
 <ul>
     @foreach (var file in Model)
     {
-        <li>@file.FullPath</li>
+        <li>
+            @file.FullPath
+            <ul>
+                <li>@file.SpliFileName.prefix</li>
+                <li>@file.SpliFileName.link</li>
+                <li>@file.SpliFileName.suffix</li>
+            </ul>
+        </li>
     }
 </ul>
 

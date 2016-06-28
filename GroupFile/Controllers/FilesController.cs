@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using GroupFile.Models;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace GroupFile.Controllers
 {
@@ -12,7 +13,6 @@ namespace GroupFile.Controllers
         public static readonly string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
         public static readonly char[] DELIMITER_CHARS = { '_', '-', ' ' };
 
-        // GET: Files
         public ActionResult Index()
         {
             List<FileModel> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
@@ -76,7 +76,12 @@ namespace GroupFile.Controllers
             }
             else
             {
-                splitFile.prefix = filename;
+                var numAlpha = new Regex("(?<Alpha>[*]*)(?<Numeric>[0-9]*)");
+                var match = numAlpha.Match(filename);
+
+                splitFile.prefix = match.Groups["Alpha"].Value;
+                splitFile.suffix = match.Groups["Numeric"].Value;
+                splitFile.link = null;
             }
 
             return splitFile;
@@ -85,6 +90,23 @@ namespace GroupFile.Controllers
         public bool ContainsDelimiter(string text)
         {
             return text.IndexOfAny(DELIMITER_CHARS) != -1;
+        }
+
+        public int NumberInLastString(string text)
+        {
+            int index = -1;
+            for (int i = text.Length - 1; i < 0; i--)
+            {
+                if (Char.IsDigit(text[i]))
+                {
+                    index = i;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return index;
         }
     }
 }
