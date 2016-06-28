@@ -4,7 +4,7 @@ Given a directory tree, with root folder name is “rootuploaded”, we need to 
 <li>Files in different subfolders cannot be grouped.</li>
 <li>Files in a group may have same or different extension.</li>
 <li>Each group must have minimum 2 files, maximum 5 files.</li>
-<li>Grouping files based on 6 naming conventions (with top­down priority):
+<li>Grouping files based on 6 naming conventions (with top-down priority):
 <ul>
 <li>FileName.ext, FileName_anything.ext, FileName_anythingelse.ext, ...</li>
 <li>FileName.ext, FileName­anything.ext, FileName­anythingelse.ext, ...</li>
