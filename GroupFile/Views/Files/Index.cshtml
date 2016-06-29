@@ -7,12 +7,19 @@
 
 <h3>Group File</h3>
 <ul>
-    @foreach (var group in Model)
+    @foreach (var item in Model.Select((value, i) => new { i, value }))
     {
         <li>
-            Group @group.Group
+            @if (item.i == Model.Count - 1)
+            {
+                <span>Cannot Grouped</span>
+            }
+            else
+            {
+                <span>Group @item.value.Group</span>
+            }
             <ul>
-                @foreach (var file in group.Files)
+                @foreach (var file in item.value.Files)
                 {
                     <li>@file.FullPath</li>
                 }

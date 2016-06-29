@@ -9,6 +9,11 @@ namespace GroupFile.Models
     {
         public List<FileModel> Files { get; set; }
         public int Group { get; set; }
+
+        public GroupFileModel()
+        {
+            this.Files = new List<FileModel>();
+        }
     }
 
     public class FileModel

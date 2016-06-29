@@ -12,11 +12,14 @@ namespace GroupFile.Controllers
     {
         public static string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
         public static char[] DELIMITER_CHARS = { ' ', '-', '_' };
-        public int indexGroup = 1;
+        private int indexGroup = 1;
+        private GroupFileModel cannotGroup = new GroupFileModel();
 
         public ActionResult Index()
         {
             List<GroupFileModel> groupFiles = ProcessDirectory(PATH_ROOT_UPLOADED);
+            cannotGroup.Group = indexGroup++;
+            groupFiles.Add(cannotGroup);
             return View(groupFiles);
         }
 
@@ -58,18 +61,25 @@ namespace GroupFile.Controllers
 
             foreach (var groupFile in groupFiles)
             {
-                GroupFileModel files = new GroupFileModel();
-                List<FileModel> Files = new List<FileModel>();
-
                 if (groupFile.Count() > 1)
                 {
+                    GroupFileModel groupFileModel = new GroupFileModel();
+                    List<FileModel> Files = new List<FileModel>();
+
                     foreach (FileModel file in groupFile)
                     {
                         Files.Add(file);
                     }
-                    files.Files = Files;
-                    files.Group = indexGroup++;
-                    group.Add(files);
+                    groupFileModel.Files = Files;
+                    groupFileModel.Group = indexGroup++;
+                    group.Add(groupFileModel);
+                }
+                else
+                {
+                    foreach (FileModel file in groupFile)
+                    {
+                        cannotGroup.Files.Add(file);
+                    }
                 }
             }
 
