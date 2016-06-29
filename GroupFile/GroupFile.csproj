@@ -207,9 +207,8 @@
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\GroupFileModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\SplitFileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -222,6 +221,8 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="rootuploaded\file 1.txt" />
+    <Content Include="rootuploaded\file 5.txt" />
     <Content Include="rootuploaded\file-2.txt" />
     <Content Include="rootuploaded\file-name-2.txt" />
     <Content Include="rootuploaded\file-name.txt" />
@@ -230,9 +231,11 @@
     <Content Include="rootuploaded\file2.txt" />
     <Content Include="rootuploaded\file3.txt" />
     <Content Include="rootuploaded\file4.txt" />
+    <Content Include="rootuploaded\file_1.txt" />
+    <Content Include="rootuploaded\file_5.txt" />
     <Content Include="rootuploaded\sub1\file-sub-1.txt" />
     <Content Include="rootuploaded\sub1\file-sub-2.txt" />
-    <Content Include="rootuploaded\sub2\document_file.txt" />
+    <Content Include="rootuploaded\sub2\document_file_.txt" />
     <Content Include="rootuploaded\sub2\document_file_a.txt" />
     <Content Include="rootuploaded\sub2\file-text-1.txt" />
     <Content Include="Scripts\bootstrap.js" />

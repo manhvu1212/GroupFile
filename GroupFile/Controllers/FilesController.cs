@@ -10,26 +10,27 @@ namespace GroupFile.Controllers
 {
     public class FilesController : Controller
     {
-        public static readonly string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
-        public static readonly char[] DELIMITER_CHARS = { '_', '-', ' ' };
+        public static string PATH_ROOT_UPLOADED = System.Web.HttpContext.Current.Server.MapPath("~/rootuploaded");
+        public static char[] DELIMITER_CHARS = { ' ', '-', '_' };
+        public int indexGroup = 1;
 
         public ActionResult Index()
         {
-            List<FileModel> listFile = ProcessDirectory(PATH_ROOT_UPLOADED);
-            return View(listFile);
+            List<GroupFileModel> groupFiles = ProcessDirectory(PATH_ROOT_UPLOADED);
+            return View(groupFiles);
         }
 
-        public List<FileModel> ProcessDirectory(string pathfile)
+        public List<GroupFileModel> ProcessDirectory(string pathfile)
         {
-            List<FileModel> listFiles = new List<FileModel>();
-
-            foreach (string directory in Directory.GetDirectories(pathfile))
-            {
-                listFiles.AddRange(ProcessDirectory(directory));
-            }
-
+            List<GroupFileModel> group = new List<GroupFileModel>();
             try
             {
+                foreach (string directory in Directory.GetDirectories(pathfile))
+                {
+                    group.AddRange(ProcessDirectory(directory));
+                }
+
+                List<FileModel> listFiles = new List<FileModel>();
                 foreach (string file in Directory.GetFiles(pathfile))
                 {
                     FileModel listFile = new FileModel();
@@ -37,13 +38,42 @@ namespace GroupFile.Controllers
                     listFile.SpliFileName = SplitFileName(Path.GetFileNameWithoutExtension(file));
                     listFiles.Add(listFile);
                 }
+                group.AddRange(GroupFile(listFiles));
             }
             catch (DirectoryNotFoundException e)
             {
 
             }
 
-            return listFiles;
+            return group;
+        }
+
+        public List<GroupFileModel> GroupFile(List<FileModel> listFiles)
+        {
+            List<GroupFileModel> group = new List<GroupFileModel>();
+
+            var groupFiles = listFiles.OrderByDescending(d => d.SpliFileName.isGroupDigit).ThenBy(l => l.SpliFileName.link).ThenBy(p => p.SpliFileName.prefix)
+                .GroupBy(g => new { g.SpliFileName.isGroupDigit, g.SpliFileName.link, g.SpliFileName.prefix })
+                .ToList();
+
+            foreach (var groupFile in groupFiles)
+            {
+                GroupFileModel files = new GroupFileModel();
+                List<FileModel> Files = new List<FileModel>();
+
+                if (groupFile.Count() > 1)
+                {
+                    foreach (FileModel file in groupFile)
+                    {
+                        Files.Add(file);
+                    }
+                    files.Files = Files;
+                    files.Group = indexGroup++;
+                    group.Add(files);
+                }
+            }
+
+            return group;
         }
 
         public SplitFileModel SplitFileName(string filename)
@@ -53,50 +83,45 @@ namespace GroupFile.Controllers
             int index = NumberInLastString(filename);
             if (index == -1)
             {
-                splitFile.suffix = "nothing";
-                splitFile.prefix = "nothing";
+                splitFile.prefix = filename;
+                splitFile.isGroupDigit = 0;
+                splitFile.link = -1;
+
+                if (filename.IndexOfAny(DELIMITER_CHARS) != -1)
+                {
+                    for (int i = 0; i < DELIMITER_CHARS.Length; i++)
+                    {
+                        string[] words = filename.Split(DELIMITER_CHARS[i]);
+                        if (words.Length > 1)
+                        {
+                            if (words[words.Length - 1].Length <= 1)
+                            {
+                                splitFile.link = i;
+                                splitFile.suffix = words[words.Length - 1];
+                                splitFile.prefix = String.Join(DELIMITER_CHARS[i].ToString(), words.Take(words.Length - 1));
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             else
             {
                 splitFile.suffix = filename.Substring(index);
-                splitFile.prefix = filename.Substring(0, index);
+                splitFile.isGroupDigit = 1;
+                if (DELIMITER_CHARS.Contains(filename[index - 1]))
+                {
+                    splitFile.link = Array.IndexOf(DELIMITER_CHARS, filename[index - 1]);
+                    splitFile.prefix = filename.Substring(0, index - 1);
+                }
+                else
+                {
+                    splitFile.link = -1;
+                    splitFile.prefix = filename.Substring(0, index);
+                }
             }
 
-            //if (ContainsDelimiter(filename))
-            //{
-            //    foreach (char delimiter in DELIMITER_CHARS)
-            //    {
-            //        string[] words = filename.Split(delimiter);
-            //        if (words.Length > 1)
-            //        {
-            //            if (ContainsDelimiter(words[words.Length - 1]))
-            //            {
-            //                continue;
-            //            }
-            //            else
-            //            {
-            //                splitFile.link = delimiter.ToString();
-            //                splitFile.suffix = words[words.Length - 1];
-            //                splitFile.prefix = String.Join(delimiter.ToString(), words.Take(words.Length - 1));
-            //            }
-            //        }
-            //        else
-            //        {
-            //            continue;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-
-            //}
-
             return splitFile;
-        }
-
-        public bool ContainsDelimiter(string text)
-        {
-            return text.IndexOfAny(DELIMITER_CHARS) != -1;
         }
 
         public int NumberInLastString(string text)
@@ -115,5 +140,6 @@ namespace GroupFile.Controllers
             }
             return index;
         }
+
     }
 }
