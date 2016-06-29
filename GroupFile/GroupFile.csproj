@@ -231,6 +231,7 @@
     <Content Include="rootuploaded\file2.txt" />
     <Content Include="rootuploaded\file3.txt" />
     <Content Include="rootuploaded\file4.txt" />
+    <Content Include="rootuploaded\file46.txt" />
     <Content Include="rootuploaded\file_1.txt" />
     <Content Include="rootuploaded\file_5.txt" />
     <Content Include="rootuploaded\sub1\file-sub-1.txt" />

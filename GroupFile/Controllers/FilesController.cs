@@ -65,14 +65,30 @@ namespace GroupFile.Controllers
                 {
                     GroupFileModel groupFileModel = new GroupFileModel();
                     List<FileModel> Files = new List<FileModel>();
-
+                    int numberGroup = (int)Math.Ceiling(((double)groupFile.Count() / 5));
+                    int maxNumberValue = (int)Math.Ceiling(((double)groupFile.Count() / numberGroup));
+                    int i = 0;
                     foreach (FileModel file in groupFile)
                     {
+                        i++;
                         Files.Add(file);
+
+                        if (i == maxNumberValue)
+                        {
+                            groupFileModel.Files = Files;
+                            groupFileModel.Group = indexGroup++;
+                            group.Add(groupFileModel);
+
+                            if (numberGroup > 1)
+                            {
+                                groupFileModel = new GroupFileModel();
+                                Files = new List<FileModel>();
+                                numberGroup -= 1;
+                                maxNumberValue = (int)Math.Ceiling((double)((groupFile.Count() - maxNumberValue) / numberGroup));
+                                i = 0;
+                            }
+                        }
                     }
-                    groupFileModel.Files = Files;
-                    groupFileModel.Group = indexGroup++;
-                    group.Add(groupFileModel);
                 }
                 else
                 {
